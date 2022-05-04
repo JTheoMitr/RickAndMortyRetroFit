@@ -3,6 +3,8 @@ package com.example.rickandmortyretrofit
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.rickandmortyretrofit.network.ApiClient
 import com.example.rickandmortyretrofit.network.CharacterResponse
 import retrofit2.Call
@@ -24,6 +26,17 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     Log.d("characters", "" + response.body())
+
+                    val result = response.body()?.result
+                    result?.let {
+                        val adapter = MainAdapter(result)
+                        val recyclerView = findViewById<RecyclerView>(R.id.charactersRv)
+
+                        // Using StaggeredGridLayoutManager to allow multiple items on one row
+                        recyclerView?.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                        // Set the adapter
+                        recyclerView?.adapter = adapter
+                    }
                 }
             }
             override fun onFailure(call: Call<CharacterResponse>, t: Throwable) {
