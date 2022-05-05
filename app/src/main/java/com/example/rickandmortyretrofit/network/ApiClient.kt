@@ -32,6 +32,10 @@ object ApiClient {
 // API Interface
 
 interface ApiService {
+
     @GET("character")
-    fun fetchCharacters(@Query("page") page:String): Call<CharacterResponse>
+    fun fetchCharacters(
+        @Query("page") page: String
+    )
+            : Call<CharacterResponse>
 }
