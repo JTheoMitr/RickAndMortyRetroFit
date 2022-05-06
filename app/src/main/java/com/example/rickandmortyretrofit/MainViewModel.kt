@@ -14,8 +14,10 @@ import retrofit2.Response
 class MainViewModel(private val repository: Repository = Repository(ApiClient.apiService)) :
     ViewModel() {
 
+    // create a mutable list to alter within this class after making a call
     private var _charactersLiveData = MutableLiveData<List<Character>>()
 
+    // create a NON-mutable list for the View to observe that will GET its values from the mutable list - this keeps mutable data sets out of the view directly
     val characterLiveData: LiveData<List<Character>>
         get() = _charactersLiveData
 
