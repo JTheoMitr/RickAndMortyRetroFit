@@ -3,12 +3,15 @@ package com.example.rickandmortyretrofit
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.rickandmortyretrofit.network.Character
 import com.example.rickandmortyretrofit.network.ApiClient
 import com.example.rickandmortyretrofit.network.CharacterResponse
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Response
 
@@ -30,11 +33,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun processCharacterResponse(state: ScreenState<List<Character>?>) {
+
+        val pb = findViewById<ProgressBar>(R.id.progressBar)
+
         when (state) {
             is ScreenState.Loading -> {
-                // TODO Add Progress Bar
+                pb.visibility = View.VISIBLE
             }
             is ScreenState.Success -> {
+                pb.visibility = View.GONE
                 if(state.data != null) {
                     val adapter = MainAdapter(state.data)
                     val recyclerView = findViewById<RecyclerView>(R.id.charactersRv)
@@ -45,6 +52,9 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             is ScreenState.Error -> {
+                pb.visibility = View.GONE
+                val view = pb.rootView
+                Snackbar.make(view, state.message!!, Snackbar.LENGTH_LONG).show()
 
             }
         }
