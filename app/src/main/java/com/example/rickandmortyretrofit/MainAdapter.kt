@@ -8,28 +8,38 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.example.rickandmortyretrofit.databinding.RvItemBinding
 import com.example.rickandmortyretrofit.network.Character
 
-class MainAdapter(val charactersList: List<Character>) : RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
+class MainAdapter(val charactersList: List<Character>) :
+    RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
-    inner class MainViewHolder(private val itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class MainViewHolder(val itemBinding: RvItemBinding) :
+        RecyclerView.ViewHolder(itemBinding.root) {
         fun bindData(character: Character) {
-            val name = itemView.findViewById<TextView>(R.id.name)
-            val image = itemView.findViewById<ImageView>(R.id.image)
-            val species = itemView.findViewById<TextView>(R.id.race)
-            val planet = itemView.findViewById<TextView>(R.id.origin)
 
-            name.text = character.name
-            species.text = character.species
-            planet.text = character.origin.planet
-            image.load(character.image) {
+            //val name = itemView.findViewById<TextView>(R.id.name)
+            //name.text = character.name
+
+            itemBinding.name.text = character.name
+            itemBinding.race.text = character.species
+            itemBinding.origin.text = character.origin.planet
+
+            itemBinding.image.load(character.image) {
                 transformations(CircleCropTransformation())
             }
+
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        return MainViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_item, parent, false))
+        return MainViewHolder(
+            RvItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
