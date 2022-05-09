@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.rickandmortyretrofit.network.ApiClient
 import com.example.rickandmortyretrofit.network.Character
-import com.example.rickandmortyretrofit.network.CharacterResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 class MainViewModel(private val repository: Repository = Repository(ApiClient.apiService)) :
     ViewModel() {
@@ -27,25 +27,17 @@ class MainViewModel(private val repository: Repository = Repository(ApiClient.ap
 
     private fun fetchCharacter() {
 
-        val client = repository.getCharacters("1")
         _charactersLiveData.postValue(ScreenState.Loading(null))
-        client.enqueue(object : Callback<CharacterResponse> {
 
-            override fun onResponse(
-                call: Call<CharacterResponse>,
-                response: Response<CharacterResponse>
-            ) {
-                if (response.isSuccessful) {
-                    _charactersLiveData.postValue(ScreenState.Success(response.body()?.result))
-                } else {
-                    _charactersLiveData.postValue(ScreenState.Error(null, response.code().toString()))
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("MainViewModel", Thread.currentThread().name)
+            try {
+                val client = repository.getCharacters("1")
+                _charactersLiveData.postValue(ScreenState.Success(client.result))
+            } catch (e: Exception) {
+                _charactersLiveData.postValue(ScreenState.Error(null, e.message.toString()))
             }
-
-            override fun onFailure(call: Call<CharacterResponse>, t: Throwable) {
-                //Log.d("Failure", t.message.toString())
-                _charactersLiveData.postValue(ScreenState.Error(null, t.message.toString()))
-            }
-        })
+        }
     }
+
 }

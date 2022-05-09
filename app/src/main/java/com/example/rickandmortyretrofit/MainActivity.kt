@@ -2,18 +2,13 @@ package com.example.rickandmortyretrofit
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.rickandmortyretrofit.network.Character
-import com.example.rickandmortyretrofit.network.ApiClient
-import com.example.rickandmortyretrofit.network.CharacterResponse
 import com.google.android.material.snackbar.Snackbar
-import retrofit2.Call
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 

@@ -41,6 +41,18 @@ dependencies {
     def moshi_version = "1.9.3"
     def retrofit_version = "2.9.0"
     def lifecycle_version = "2.4.0-alpha02"
+    def coroutine = "1.5.1"
+    def coroutineScope = "2.3.1"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine"
+
+    // viewModelScope
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$coroutineScope")
+
+    // lifecycleScope
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$coroutineScope")
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
